@@ -247,10 +247,14 @@ def predict():
         ]
         
         final_features = np.array([features])
+        # FIX 1: Use final_features instead of input_features
         prediction = model.predict(final_features)
-        price = round(float(prediction[0]), 2)
         
-        return render_template_string(HTML_TEMPLATE, prediction_text=f"Estimated House Value: ${price:,.2f}")
+        # FIX 2: Target the first item in the array to avoid the 0-dimensional error
+        output = round(prediction[0], 2) 
+        
+        # FIX 3: Use the 'output' variable for formatting instead of the undefined 'price' variable
+        return render_template_string(HTML_TEMPLATE, prediction_text=f"Estimated House Value: ${output:,.2f}")
         
     except Exception as e:
         return f"<div style='color:#f87171; text-align:center; margin-top:20px;'>An error occurred: {str(e)}</div>"
